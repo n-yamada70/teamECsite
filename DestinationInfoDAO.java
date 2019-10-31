@@ -91,6 +91,38 @@ public class DestinationInfoDAO{
 		return destinationInfoDTOList;
 	}
 
+	public boolean isExistsDestinationInfo (String userId, int destinationId) throws SQLException {
+		boolean result = false;
+		DBConnector db=new DBConnector();
+		Connection con=db.getConnection();
+
+		String sql="SELECT "
+				+ "COUNT(id) As cnt "
+				+ "FROM "
+				+ "destination_info "
+				+ "WHERE "
+				+ "user_id=? and id=?";
+
+		try{
+			PreparedStatement ps=con.prepareStatement(sql);
+			ps.setString(1, userId);
+			ps.setInt(2, destinationId);
+
+			ResultSet rs=ps.executeQuery();
+
+			if(rs.next()){
+				if(rs.getInt("cnt") > 0){
+					result = true;
+				}
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			con.close();
+		}
+		return result;
+	}
+
 	public int deleteDestinationData(int id) throws SQLException{
 
 		DBConnector db=new DBConnector();

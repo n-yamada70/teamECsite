@@ -26,9 +26,14 @@ public class DeleteDestinationAction extends ActionSupport implements SessionAwa
 		if(logined!=1){
 			return "sessionTimeout";
 		}
-		String result="ERROR";
+		String result=ERROR;
 
 		try{
+
+		if (!dao.isExistsDestinationInfo(session.get("userId").toString(),id)) {
+			return result;
+		}
+
 		int count=dao.deleteDestinationData(id);
 
 		if(count>0){
